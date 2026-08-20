@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mfib"
+version = "0.1.0"
+description = "M-fibrations of monoid-labelled multidigraphs: coarsest equitable partitions, minimum bases, minimum fibrations"
+requires-python = ">=3.9"
+dependencies = ["networkx>=2.6"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools]
+packages = ["mfib", "mfibnn"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
