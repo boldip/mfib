@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "mfib"
 version = "0.1.0"
 description = "M-fibrations of monoid-labelled multidigraphs: coarsest equitable partitions, minimum bases, minimum fibrations"
+license = {text = "MIT"}
 requires-python = ">=3.9"
 dependencies = ["networkx>=2.6"]
 
