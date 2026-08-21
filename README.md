@@ -2,8 +2,7 @@
 
 Python library and tools for **M-fibrations**: fibrations of directed multigraphs whose
 arcs are labelled in a commutative monoid, as developed in the paper *"M-Fibration
-Theory with Applications to Neural Network Compression"* (P. Boldi; see the
-[Superfibrations repository](https://github.com/boldip/Superfibrations) for the paper,
+Theory with Applications to Neural Network Compression"* (Paolo Boldi) for the paper,
 the working notes and the experiments). It generalizes graph fibrations
 (Boldi–Vigna, *Discrete Math.* 243, 2002), equitable partitions, colour refinement /
 1-WL, and exact lumpability of Markov chains.
