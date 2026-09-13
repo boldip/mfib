@@ -1,7 +1,7 @@
-# mfibnn — certified ε-fibration compression of ONNX networks
+# mfibnn — certified ε-fibration reduction of ONNX models
 
-`mfibnn` takes a neural network in **ONNX** format and an evaluation dataset, compresses
-the network to a desired tolerance ε by merging equivalent-up-to-ε units/channels
+`mfibnn` takes a model in **ONNX** format and an evaluation dataset, reduces
+the model to a desired tolerance ε by merging equivalent-up-to-ε units/channels
 (the ε-approximate M-fibration quotient — see the paper in the
 [Superfibrations repository](https://github.com/boldip/Superfibrations) — computed
 with the `mfib` library), writes a smaller
