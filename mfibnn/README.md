@@ -2,8 +2,8 @@
 
 `mfibnn` takes a model in **ONNX** format and an evaluation dataset, reduces
 the model to a desired tolerance ε by merging equivalent-up-to-ε units/channels
-(the ε-approximate M-fibration quotient — see the paper in the
-[Superfibrations repository](https://github.com/boldip/Superfibrations) — computed
+(the ε-approximate M-fibration quotient — see the
+[paper](https://arxiv.org/abs/2608.25598) — computed
 with the `mfib` library), writes a smaller
 ONNX model of the same architecture, **certifies** the worst-case defect ≤ ε, and
 reports the test accuracy before and after. No retraining is involved.

@@ -1,9 +1,9 @@
 # mfib — M-fibrations of monoid-labelled graphs
 
 Python library and tools for **M-fibrations**: fibrations of directed multigraphs whose
-arcs are labelled in a commutative monoid, as developed in the paper *"M-Fibration
-Theory with Applications to Weighted Graphs"* (P. Boldi, O. M. Velarde,
-H. A. Makse). It generalizes graph fibrations
+arcs are labelled in a commutative monoid, as developed in the paper
+[*"M-Fibration Theory with Applications to Weighted Graphs"*](https://arxiv.org/abs/2608.25598)
+(P. Boldi, O. M. Velarde, H. A. Makse). It generalizes graph fibrations
 (Boldi–Vigna, *Discrete Math.* 243, 2002), equitable partitions, colour refinement /
 1-WL, and exact lumpability of Markov chains.
 
