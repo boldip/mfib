@@ -13,7 +13,7 @@ reports the test accuracy before and after. No retraining is involved.
 From the repository root (Python ≥ 3.9):
 
 ```bash
-pip install numpy scipy networkx onnx onnxruntime
+pip install numpy scipy networkx "onnx<1.20" onnxruntime
 ```
 
 Everything is run from the repository root, so that both `mfib/` and `mfibnn/` are
