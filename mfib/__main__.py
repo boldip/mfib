@@ -6,14 +6,19 @@ Reads a graph as whitespace-separated lines
 
 (weights are positive reals; blank lines and lines starting with ``#`` are
 ignored; parallel edges are allowed and node names are arbitrary tokens),
-computes the coarsest (epsilon-approximate) M-equitable partition over the
-monoid (R, +, 0), and prints one line
+computes an (epsilon-approximate) M-equitable partition over the monoid
+(R, +, 0), and prints one line
 
     node class
 
-per node, where ``class`` is the index of the fibre of the minimum
-(epsilon-approximate) fibration the node belongs to.  Classes are numbered
-consecutively in order of first appearance of their nodes in the input.
+per node.  With eps = 0 (the default) ``class`` is the index of the fibre of
+the minimum fibration the node belongs to (the coarsest equitable partition,
+which is unique).  With eps > 0 it is the index of the fibre of a certified
+epsilon-approximate fibration computed by tolerant refinement with the chosen
+center rule; this is an upper bound on the minimum number of fibres, not
+necessarily the minimum (and a minimum epsilon-approximate fibration need not
+be unique).  Classes are numbered consecutively in order of first appearance
+of their nodes in the input.
 
 Examples::
 
@@ -56,8 +61,10 @@ def read_graph(stream, undirected: bool) -> nx.MultiDiGraph:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
         prog="python3 -m mfib",
-        description="Minimum base of a weighted graph: reads 'source target weight' lines "
-                    "and prints 'node class' lines (class = fibre of the minimum fibration).")
+        description="Reads 'source target weight' lines and prints 'node class' lines: "
+                    "with --eps 0 (default) class is the fibre of the minimum fibration; "
+                    "with --eps > 0, of a certified eps-approximate fibration "
+                    "(not necessarily minimum).")
     ap.add_argument("input", nargs="?", default=None,
                     help="input file (default: standard input)")
     ap.add_argument("-u", "--undirected", action="store_true",

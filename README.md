@@ -67,8 +67,12 @@ for the model-compression methodology please refer to — and cite — the paper
 
 `python3 -m mfib` reads a graph as `source target weight` lines (weights are
 positive reals; `#` starts a comment) from a file or standard input, and prints
-`node class` lines, where `class` identifies the fibre of the minimum fibration
-the node belongs to:
+`node class` lines. With `--eps 0` (the default) `class` identifies the fibre
+of the minimum fibration the node belongs to (the coarsest equitable
+partition); with `--eps > 0` it identifies the fibre of a certified
+epsilon-approximate fibration computed by tolerant refinement, which is not
+guaranteed to have the minimum number of fibres (and a minimum
+epsilon-approximate fibration need not even be unique):
 
 ```bash
 python3 -m mfib graph.txt                 # exact minimum base, directed
