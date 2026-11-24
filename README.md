@@ -26,7 +26,7 @@ Two packages:
 
 ```bash
 pip install networkx numpy scipy          # core
-pip install "onnx<1.20" onnxruntime       # for mfibnn (onnx>=1.20 writes IR 14, not yet loadable by onnxruntime)
+pip install onnx onnxruntime              # for mfibnn (onnx>=1.20 writes IR 14: needs a recent onnxruntime, 1.32+ works)
 pip install -e .                          # this repo
 ```
 
