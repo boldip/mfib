@@ -81,6 +81,17 @@ python3 -m mfib --eps 0.5 graph.txt       # certified 0.5-approximate partition
 cat graph.txt | python3 -m mfib -e 1 -c minimax   # with the l1 Chebyshev center rule
 ```
 
+When no tolerance suggests itself, `--sweep` prints `eps classes` lines over a
+geometric grid of tolerances (from the exact count at `eps = 0` until a single
+class is reached): wide plateaus of the class count indicate stable scales,
+and a good `eps` sits in the middle of the plateau at the desired resolution.
+Partitions at different `eps` are in general not nested, so the sweep is a
+family of snapshots, not a hierarchy.
+
+```bash
+python3 -m mfib --sweep graph.txt
+```
+
 ## Tests
 
 ```bash

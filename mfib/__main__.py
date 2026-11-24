@@ -20,10 +20,19 @@ necessarily the minimum (and a minimum epsilon-approximate fibration need not
 be unique).  Classes are numbered consecutively in order of first appearance
 of their nodes in the input.
 
+With ``--sweep`` the script prints, instead of a partition, one line
+
+    eps classes
+
+per value of a geometric grid of tolerances (starting from the exact count at
+eps = 0 and stopping as soon as a single class is reached), so that one can
+pick a tolerance by looking for wide plateaus of the class count.
+
 Examples::
 
     python3 -m mfib graph.txt                  # exact minimum base, directed
     python3 -m mfib --eps 0.5 graph.txt        # certified 0.5-approximate
+    python3 -m mfib --sweep graph.txt          # class count over a grid of eps
     cat graph.txt | python3 -m mfib --undirected
 """
 
@@ -58,6 +67,30 @@ def read_graph(stream, undirected: bool) -> nx.MultiDiGraph:
     return G
 
 
+def sweep(G, center: str) -> None:
+    """Print 'eps classes' lines over a geometric grid of tolerances.
+
+    Starts with the exact count at eps = 0, then walks a geometric grid
+    (10 points per decade) from a thousandth of the inequity of the trivial
+    partition, stopping as soon as the count reaches 1.  Any center rule
+    places centers within the range of the observed values, so the count is
+    guaranteed to reach 1 by twice that inequity.
+    """
+    exact = coarsest_equitable_partition(G, "R")
+    print(0, len(exact.blocks))
+    if len(exact.blocks) == 1:
+        return
+    tot = dict(G.in_degree(weight="weight"))
+    hi = (max(tot.values()) - min(tot.values())) / 2
+    eps = hi / 1000
+    while eps <= 4 * hi:  # safety cap, never reached: 2*hi always collapses
+        n = len(epsilon_partition(G, eps, "R", center=center).partition.blocks)
+        print(f"{eps:.6g}", n)
+        if n == 1:
+            return
+        eps *= 10 ** 0.1
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(
         prog="python3 -m mfib",
@@ -75,10 +108,15 @@ def main(argv=None) -> int:
     ap.add_argument("-c", "--center", default="mean",
                     choices=["mean", "iter", "minimax", "seed"],
                     help="center rule used when --eps > 0 (default: mean)")
+    ap.add_argument("-s", "--sweep", action="store_true",
+                    help="print 'eps classes' lines over a geometric grid of "
+                         "tolerances instead of a partition (incompatible with --eps)")
     args = ap.parse_args(argv)
 
     if args.eps < 0:
         ap.error("--eps must be nonnegative")
+    if args.sweep and args.eps > 0:
+        ap.error("--sweep and --eps are mutually exclusive")
 
     if args.input:
         try:
@@ -94,6 +132,10 @@ def main(argv=None) -> int:
             stream.close()
 
     if G.number_of_nodes() == 0:
+        return 0
+
+    if args.sweep:
+        sweep(G, args.center)
         return 0
 
     if args.eps > 0:

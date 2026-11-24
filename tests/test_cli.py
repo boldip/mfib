@@ -74,7 +74,26 @@ def test_read_graph_parallel_and_loop():
     assert G.number_of_edges() == 5  # loop once, each a-b edge twice
 
 
+def test_sweep(capsys, monkeypatch):
+    out = run(["--sweep"], H, capsys, monkeypatch)
+    lines = [line.split() for line in out.strip().splitlines()]
+    assert lines[0] == ["0", "4"]           # exact count first
+    counts = [int(c) for _, c in lines]
+    assert counts[-1] == 1                  # stops at a single class
+    assert 3 in counts                      # the [1, 13.5) plateau of H
+    eps = [float(e) for e, _ in lines]
+    assert eps == sorted(eps)
+
+
+def test_sweep_single_class(capsys, monkeypatch):
+    # both nodes have equal in-weights: exact partition already trivial
+    out = run(["--sweep"], "a b 1\nb a 1\n", capsys, monkeypatch)
+    assert out.split() == ["0", "1"]
+
+
 def test_errors():
+    with pytest.raises(SystemExit):
+        main(["--sweep", "-e", "1"])        # mutually exclusive
     with pytest.raises(SystemExit):
         read_graph(io.StringIO("a b\n"), undirected=False)
     with pytest.raises(SystemExit):
