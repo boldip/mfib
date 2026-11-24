@@ -75,12 +75,26 @@ def test_read_graph_parallel_and_loop():
 
 
 def test_sweep(capsys, monkeypatch):
+    # mean-center thresholds on H are 1 and 13.5; breakpoints within 1%
     out = run(["--sweep"], H, capsys, monkeypatch)
+    lines = out.strip().splitlines()
+    assert lines[0] == "[0, 0]  4  exact"
+    assert lines[1].startswith("(0, ") and lines[1].endswith("<= 4")
+    assert lines[2].endswith("<= 3")
+    assert lines[3].endswith("1  exact")
+    bp1 = float(lines[2].split(",")[0].lstrip("["))
+    bp2 = float(lines[3].split(",")[0].lstrip("["))
+    assert 0.99 <= bp1 <= 1.02
+    assert 13.4 <= bp2 <= 13.7
+
+
+def test_sweep_raw(capsys, monkeypatch):
+    out = run(["--sweep", "--raw"], H, capsys, monkeypatch)
     lines = [line.split() for line in out.strip().splitlines()]
     assert lines[0] == ["0", "4"]           # exact count first
     counts = [int(c) for _, c in lines]
-    assert counts[-1] == 1                  # stops at a single class
-    assert 3 in counts                      # the [1, 13.5) plateau of H
+    assert counts[-1] == 1
+    assert 3 in counts
     eps = [float(e) for e, _ in lines]
     assert eps == sorted(eps)
 
@@ -88,12 +102,14 @@ def test_sweep(capsys, monkeypatch):
 def test_sweep_single_class(capsys, monkeypatch):
     # both nodes have equal in-weights: exact partition already trivial
     out = run(["--sweep"], "a b 1\nb a 1\n", capsys, monkeypatch)
-    assert out.split() == ["0", "1"]
+    assert out.strip() == "[0, inf)  1  exact"
 
 
 def test_errors():
     with pytest.raises(SystemExit):
         main(["--sweep", "-e", "1"])        # mutually exclusive
+    with pytest.raises(SystemExit):
+        main(["--raw"])                     # --raw requires --sweep
     with pytest.raises(SystemExit):
         read_graph(io.StringIO("a b\n"), undirected=False)
     with pytest.raises(SystemExit):

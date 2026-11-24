@@ -81,16 +81,29 @@ python3 -m mfib --eps 0.5 graph.txt       # certified 0.5-approximate partition
 cat graph.txt | python3 -m mfib -e 1 -c minimax   # with the l1 Chebyshev center rule
 ```
 
-When no tolerance suggests itself, `--sweep` prints `eps classes` lines over a
-geometric grid of tolerances (from the exact count at `eps = 0` until a single
-class is reached): wide plateaus of the class count indicate stable scales,
-and a good `eps` sits in the middle of the plateau at the desired resolution.
-Partitions at different `eps` are in general not nested, so the sweep is a
-family of snapshots, not a hierarchy.
+When no tolerance suggests itself, `--sweep` summarizes what the computed
+partitions certify about the minimum number of classes as a function of the
+tolerance:
 
 ```bash
-python3 -m mfib --sweep graph.txt
+$ python3 -m mfib --sweep graph.txt
+[0, 0]  4  exact
+(0, 1.002)  <= 4
+[1.002, 13.56)  <= 3
+[13.56, inf)  1  exact
 ```
+
+A partition certified at tolerance `eps` is also valid at every larger
+tolerance, so each interval carries the best bound certified so far (`<= n`);
+only the two ends are exact, `eps = 0` (the coarsest equitable partition is a
+true minimum) and the final collapse to one class.  Breakpoints are the
+tolerances where the output of tolerant refinement was observed to drop,
+localized by bisection to 1% relative precision; the true minimum may drop
+earlier than a reported breakpoint.  Wide intervals indicate stable scales,
+and a good `eps` sits in the middle of the interval at the desired
+resolution; note that partitions at different `eps` are in general not
+nested, so the sweep is a family of snapshots, not a hierarchy.  `--raw`
+prints the sampled `eps classes` pairs instead of the summary.
 
 ## Tests
 
