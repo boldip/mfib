@@ -63,6 +63,20 @@ This repository implements the general algebraic theory (minimum bases of graphs
 labelled over arbitrary commutative monoids, and the certified ε-approximate theory);
 for the model-compression methodology please refer to — and cite — the papers above.
 
+## Command line: minimum base of a weighted graph
+
+`python3 -m mfib` reads a graph as `source target weight` lines (weights are
+positive reals; `#` starts a comment) from a file or standard input, and prints
+`node class` lines, where `class` identifies the fibre of the minimum fibration
+the node belongs to:
+
+```bash
+python3 -m mfib graph.txt                 # exact minimum base, directed
+python3 -m mfib --undirected graph.txt    # each edge read as two opposite arcs
+python3 -m mfib --eps 0.5 graph.txt       # certified 0.5-approximate partition
+cat graph.txt | python3 -m mfib -e 1 -c minimax   # with the l1 Chebyshev center rule
+```
+
 ## Tests
 
 ```bash
