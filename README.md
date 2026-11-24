@@ -105,6 +105,10 @@ resolution; note that partitions at different `eps` are in general not
 nested, so the sweep is a family of snapshots, not a hierarchy.  `--raw`
 prints the sampled `eps classes` pairs instead of the summary.
 
+Two classic weighted networks to try the tool on (Zachary's karate club and
+the *Les Misérables* co-appearance graph) are in
+[`examples/`](examples/README.md).
+
 ## Tests
 
 ```bash
